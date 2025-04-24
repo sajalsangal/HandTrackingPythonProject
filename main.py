@@ -8,6 +8,9 @@ mpHands = mp.solutions.hands
 hands = mpHands.Hands()
 mpDraw = mp.solutions.drawing_utils
 
+cTime = 0
+pTime = 0
+
 while True:
     success, img = cap.read()
     if not success:
@@ -22,8 +25,22 @@ while True:
 
     if results.multi_hand_landmarks:
         for handLms in results.multi_hand_landmarks:
+            for id,lm in enumerate(handLms.landmark):
+                # print(id,lm)
+                h, w, c = img.shape
+                cx, cy = int(lm.x * w), int(lm.y*h)
+                print(id, cx, cy)
+                if id == 4:
+                    cv2.circle(flipped_image, (cx, cy), 15, (255,0, 255), cv2.FILLED)
+
             mpDraw.draw_landmarks(flipped_image , handLms, mpHands.HAND_CONNECTIONS)
 
+    cTime = time.time()
+    fps = 1 / (cTime - pTime)
+    pTime = cTime
+
+    cv2.putText(flipped_image, str(int(fps)), (10,70), cv2.FONT_HERSHEY_SIMPLEX, 3,
+                (255,0,255), 3)
 
     cv2.imshow("Image", flipped_image)
     cv2.waitKey(1)
