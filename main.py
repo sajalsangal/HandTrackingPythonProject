@@ -4,6 +4,9 @@ import time
 
 cap = cv2.VideoCapture(0) #Video Object
 
+mpHands = mp.solutions.hands
+hands = mpHands.Hands()
+
 
 while True:
     success, img = cap.read()
@@ -12,6 +15,13 @@ while True:
         break
 
     flipped_image = cv2.flip(img, 1)
+
+    imgRGB = cv2.cvtColor(flipped_image, cv2.COLOR_BGR2RGB)
+    results = hands.process(imgRGB)
+    print(results.multi_hand_landmarks)
+
+
+
 
 
     cv2.imshow("Image", flipped_image)
