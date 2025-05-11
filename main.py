@@ -21,7 +21,7 @@ while True:
 
     imgRGB = cv2.cvtColor(flipped_image, cv2.COLOR_BGR2RGB)
     results = hands.process(imgRGB)
-    #print(results.multi_hand_landmarks)
+
 
     if results.multi_hand_landmarks:
         for handLms in results.multi_hand_landmarks:
@@ -30,8 +30,7 @@ while True:
                 h, w, c = img.shape
                 cx, cy = int(lm.x * w), int(lm.y*h)
                 print(id, cx, cy)
-                if id == 4:
-                    cv2.circle(flipped_image, (cx, cy), 15, (255,0, 255), cv2.FILLED)
+
 
             mpDraw.draw_landmarks(flipped_image , handLms, mpHands.HAND_CONNECTIONS)
 
