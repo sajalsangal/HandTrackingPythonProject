@@ -17,23 +17,26 @@ class handDetector():
 
     def findHands(self, flipped_image, draw = True):
         imgRGB = cv2.cvtColor(flipped_image, cv2.COLOR_BGR2RGB)
-        results = self.hands.process(imgRGB)
+        self.results = self.hands.process(imgRGB)
 
-        if results.multi_hand_landmarks:
-            for handLms in results.multi_hand_landmarks:
+        if self.results.multi_hand_landmarks:
+            for handLms in self.results.multi_hand_landmarks:
                 if draw:
                     self.mpDraw.draw_landmarks(flipped_image, handLms, self.mpHands.HAND_CONNECTIONS)
         return flipped_image
 
-    # def findPosition(self, flipped_image, handNo = 0, draw = True):
-    #     lmList = []
-    #     for id, lm in enumerate(handLms.landmark):
-    #         # print(id,lm)
-    #         h, w, c = flipped_image.shape
-    #         cx, cy = int(lm.x * w), int(lm.y * h)
-    #         print(id, cx, cy)
+    def findPosition(self, flipped_image, handNo = 0, draw = True):
+        lmList = []
+        if self.results.multi_hand_landmarks:
+            myHand = self.results.multi_hand_landmarks[handNo]
+            for id, lm in enumerate(myHand.landmark):
+                h, w, c = flipped_image.shape
+                cx, cy = int(lm.x * w), int(lm.y * h)
+                lmList.append([id, cx, cy])
+                if draw:
+                    cv2.circle(flipped_image, (cx, cy), 10, (255, 0, 255), cv2.FILLED)
 
-    #     return LmList
+        return lmList
 
 def main():
     cap = cv2.VideoCapture(0)  # Video Object
@@ -48,6 +51,10 @@ def main():
 
         flipped_image = cv2.flip(img, 1)
         final_image = detector.findHands(flipped_image)
+        lmlist = detector.findPosition(flipped_image)
+        if len(lmlist) != 0:
+            print(lmlist[4])
+
         cTime = time.time()
         fps = 1 / (cTime - pTime)
         pTime = cTime
