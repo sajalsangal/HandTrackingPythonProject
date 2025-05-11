@@ -25,15 +25,15 @@ class handDetector():
                     self.mpDraw.draw_landmarks(flipped_image, handLms, self.mpHands.HAND_CONNECTIONS)
         return flipped_image
 
-    def findPosition(self, flipped_image, handNo = 0, draw = True):
-        lmList = []
-        for id, lm in enumerate(handLms.landmark):
-            # print(id,lm)
-            h, w, c = flipped_image.shape
-            cx, cy = int(lm.x * w), int(lm.y * h)
-            print(id, cx, cy)
+    # def findPosition(self, flipped_image, handNo = 0, draw = True):
+    #     lmList = []
+    #     for id, lm in enumerate(handLms.landmark):
+    #         # print(id,lm)
+    #         h, w, c = flipped_image.shape
+    #         cx, cy = int(lm.x * w), int(lm.y * h)
+    #         print(id, cx, cy)
 
-        return LmList
+    #     return LmList
 
 def main():
     cap = cv2.VideoCapture(0)  # Video Object
